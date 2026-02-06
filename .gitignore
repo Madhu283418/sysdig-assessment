@@ -1,0 +1,27 @@
+# Environment files with secrets
+.env
+*.env
+.env.*
+
+# AWS credentials
+.aws/
+credentials
+
+# Kubeconfig files
+kubeconfig
+*.kubeconfig
+
+# Sysdig secrets
+sysdig-agent-*.yaml
+
+# Terraform state files
+*.tfstate
+*.tfstate.*
+.terraform/
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
