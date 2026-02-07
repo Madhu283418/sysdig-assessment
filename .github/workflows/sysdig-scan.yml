@@ -7,9 +7,6 @@ on:
     branches: [ main, master ]
   workflow_dispatch:
 
-env:
-  SYSDIG_SECURE_ENDPOINT: https://app.us4.sysdig.com
-
 jobs:
   scan-vote:
     name: Scan Vote Container
@@ -19,23 +16,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Build vote image
         run: |
           cd voting-app/vote
-          docker build -t vote:${{ github.sha }} .
+          docker build -t vote:latest .
 
       - name: Scan vote image with Sysdig
         uses: sysdiglabs/scan-action@v5
         continue-on-error: true
         with:
-          image-tag: vote:${{ github.sha }}
+          image-tag: vote:latest
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-          sysdig-secure-url: ${{ env.SYSDIG_SECURE_ENDPOINT }}
-          input-type: docker-daemon
-          ignore-failed-scan: true
+          sysdig-secure-url: https://app.us4.sysdig.com
 
   scan-result:
     name: Scan Result Container
@@ -45,23 +37,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Build result image
         run: |
           cd voting-app/result
-          docker build -t result:${{ github.sha }} .
+          docker build -t result:latest .
 
       - name: Scan result image with Sysdig
         uses: sysdiglabs/scan-action@v5
         continue-on-error: true
         with:
-          image-tag: result:${{ github.sha }}
+          image-tag: result:latest
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-          sysdig-secure-url: ${{ env.SYSDIG_SECURE_ENDPOINT }}
-          input-type: docker-daemon
-          ignore-failed-scan: true
+          sysdig-secure-url: https://app.us4.sysdig.com
 
   scan-worker:
     name: Scan Worker Container
@@ -71,20 +58,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
-
       - name: Build worker image
         run: |
           cd voting-app/worker
-          docker build -t worker:${{ github.sha }} .
+          docker build -t worker:latest .
 
       - name: Scan worker image with Sysdig
         uses: sysdiglabs/scan-action@v5
         continue-on-error: true
         with:
-          image-tag: worker:${{ github.sha }}
+          image-tag: worker:latest
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
-          sysdig-secure-url: ${{ env.SYSDIG_SECURE_ENDPOINT }}
-          input-type: docker-daemon
-          ignore-failed-scan: true
+          sysdig-secure-url: https://app.us4.sysdig.com
