@@ -1,0 +1,48 @@
+name: Sysdig IaC Scan
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'terraform/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'terraform/**'
+  workflow_dispatch:
+
+jobs:
+  scan-terraform:
+    name: Scan Terraform IaC
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Scan AWS Integration Terraform
+        uses: sysdiglabs/scan-action@v5
+        continue-on-error: true
+        with:
+          iac-scan-path: terraform/aws-integration
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://app.us4.sysdig.com
+          mode: iac
+
+      - name: Scan EKS Cluster Terraform
+        uses: sysdiglabs/scan-action@v5
+        continue-on-error: true
+        with:
+          iac-scan-path: terraform/eks-cluster
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://app.us4.sysdig.com
+          mode: iac
+
+      - name: Scan Kubernetes Manifests
+        uses: sysdiglabs/scan-action@v5
+        continue-on-error: true
+        with:
+          iac-scan-path: voting-app/k8s-specifications
+          sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
+          sysdig-secure-url: https://app.us4.sysdig.com
+          mode: iac
