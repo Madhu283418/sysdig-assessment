@@ -130,24 +130,6 @@ The CI/CD pipeline automatically scans container images on every push:
 - Built custom monitoring queries
 - Demonstrated forensic investigation features
 
-## Interview Preparation
-
-### Demo Flow
-1. Show infrastructure (kubectl, AWS console)
-2. Navigate to Sysdig portal
-3. Review vulnerability scan results
-4. Explain compliance findings
-5. Demonstrate Advisor recommendations
-6. Show GitHub Actions integration
-7. Discuss production readiness
-
-### Talking Points
-- **Security posture:** How Sysdig provides shift-left and runtime security
-- **Cost optimization:** Using Advisor to right-size resources
-- **Compliance:** Meeting CIS and regulatory requirements
-- **DevOps integration:** CI/CD scanning and GitOps workflows
-- **Troubleshooting:** Using metrics and logs for diagnosis
-
 ## Cleanup
 
 ```bash
