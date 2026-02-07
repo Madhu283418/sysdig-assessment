@@ -14,21 +14,25 @@ Technical assessment demonstrating Sysdig Secure and Monitor capabilities with a
 
 ```
 sysdig-assessment/
-├── .github/workflows/        # CI/CD pipelines
-│   └── sysdig-scan.yml      # Container scanning workflow
-├── eks-terraform/           # EKS cluster infrastructure
-│   ├── provider.tf
-│   ├── variables.tf
-│   ├── eks-cluster.tf
-│   ├── eks-nodes.tf
-│   ├── vpc.tf
-│   └── outputs.tf
-├── terraform/               # AWS account integration
-│   └── main.tf
-├── voting-app/             # Application manifests
-│   └── k8s-specifications/
-├── deploy-voting-app.sh    # Application deployment
-├── install-sysdig-deploy.sh # Agent installation
+├── .github/workflows/          # CI/CD pipelines
+│   └── sysdig-scan.yml        # Container scanning workflow
+├── terraform/                 # Infrastructure as code
+│   ├── aws-integration/       # Sysdig AWS account integration
+│   │   └── main.tf
+│   └── eks-cluster/          # EKS cluster infrastructure
+│       ├── provider.tf
+│       ├── variables.tf
+│       ├── eks-cluster.tf
+│       ├── eks-nodes.tf
+│       ├── vpc.tf
+│       └── outputs.tf
+├── voting-app/               # Application code and manifests
+│   ├── vote/                 # Python voting frontend
+│   ├── result/               # Node.js results frontend
+│   ├── worker/               # .NET vote processor
+│   └── k8s-specifications/   # Kubernetes manifests
+├── deploy-voting-app.sh      # Application deployment
+├── install-sysdig-deploy.sh  # Agent installation
 └── generate-security-events.sh # Security testing
 ```
 
@@ -47,7 +51,7 @@ The voting application consists of 5 microservices:
 ### 1. Deploy Infrastructure
 
 ```bash
-cd eks-terraform
+cd terraform/eks-cluster
 terraform init
 terraform apply
 ```
@@ -154,7 +158,7 @@ kubectl delete -f voting-app/k8s-specifications/
 helm uninstall sysdig-agent -n sysdig-agent
 
 # Destroy infrastructure
-cd eks-terraform
+cd terraform/eks-cluster
 terraform destroy
 ```
 
