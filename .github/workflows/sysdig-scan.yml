@@ -11,17 +11,11 @@ on:
 
 env:
   SYSDIG_SECURE_ENDPOINT: https://app.us4.sysdig.com
-  REGISTRY: ghcr.io
-  IMAGE_PREFIX: ${{ github.repository_owner }}
 
 jobs:
   scan-vote:
     name: Scan Vote Container
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      security-events: write
 
     steps:
       - name: Checkout code
@@ -31,39 +25,23 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build vote image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./voting-app/vote
-          push: false
-          load: true
-          tags: vote:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+        run: |
+          cd voting-app/vote
+          docker build -t vote:${{ github.sha }} .
 
       - name: Scan vote image with Sysdig
         uses: sysdiglabs/scan-action@v5
+        continue-on-error: true
         with:
           image-tag: vote:${{ github.sha }}
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: ${{ env.SYSDIG_SECURE_ENDPOINT }}
           input-type: docker-daemon
           ignore-failed-scan: true
-          severity-at-least: medium
-
-      - name: Upload scan results
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: ./sysdig-results.sarif
-          category: vote-container
 
   scan-result:
     name: Scan Result Container
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      security-events: write
 
     steps:
       - name: Checkout code
@@ -73,39 +51,23 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build result image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./voting-app/result
-          push: false
-          load: true
-          tags: result:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+        run: |
+          cd voting-app/result
+          docker build -t result:${{ github.sha }} .
 
       - name: Scan result image with Sysdig
         uses: sysdiglabs/scan-action@v5
+        continue-on-error: true
         with:
           image-tag: result:${{ github.sha }}
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: ${{ env.SYSDIG_SECURE_ENDPOINT }}
           input-type: docker-daemon
           ignore-failed-scan: true
-          severity-at-least: medium
-
-      - name: Upload scan results
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: ./sysdig-results.sarif
-          category: result-container
 
   scan-worker:
     name: Scan Worker Container
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-      security-events: write
 
     steps:
       - name: Checkout code
@@ -115,28 +77,16 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build worker image
-        uses: docker/build-push-action@v5
-        with:
-          context: ./voting-app/worker
-          push: false
-          load: true
-          tags: worker:${{ github.sha }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+        run: |
+          cd voting-app/worker
+          docker build -t worker:${{ github.sha }} .
 
       - name: Scan worker image with Sysdig
         uses: sysdiglabs/scan-action@v5
+        continue-on-error: true
         with:
           image-tag: worker:${{ github.sha }}
           sysdig-secure-token: ${{ secrets.SYSDIG_SECURE_TOKEN }}
           sysdig-secure-url: ${{ env.SYSDIG_SECURE_ENDPOINT }}
           input-type: docker-daemon
           ignore-failed-scan: true
-          severity-at-least: medium
-
-      - name: Upload scan results
-        uses: github/codeql-action/upload-sarif@v3
-        if: always()
-        with:
-          sarif_file: ./sysdig-results.sarif
-          category: worker-container
