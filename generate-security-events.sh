@@ -1,7 +1,9 @@
 #!/bin/bash
 # Script to Generate Sysdig Security Events
 
-export KUBECONFIG=/path/to/repo/kubeconfig
+# Get script directory for relative paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export KUBECONFIG="${SCRIPT_DIR}/kubeconfig"
 
 echo "=== Generating Security Events for Sysdig Demo ==="
 echo ""

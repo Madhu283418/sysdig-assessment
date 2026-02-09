@@ -1,7 +1,9 @@
 #!/bin/bash
 # Install Sysdig Deploy Chart (Comprehensive Installation)
 
-export KUBECONFIG=/path/to/repo/kubeconfig
+# Get script directory for relative paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+export KUBECONFIG="${SCRIPT_DIR}/kubeconfig"
 
 echo "=== Installing Sysdig Deploy (Comprehensive Agent) ==="
 echo ""

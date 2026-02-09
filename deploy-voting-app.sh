@@ -3,14 +3,17 @@
 
 set -e
 
+# Get script directory for relative paths
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
 # Load environment
 export AWS_PROFILE=sysdig-trial
-export KUBECONFIG=/path/to/repo/kubeconfig
+export KUBECONFIG="${SCRIPT_DIR}/kubeconfig"
 
 echo "Deploying Voting App..."
 
 # Apply all Kubernetes manifests
-kubectl apply -f /path/to/repo/voting-app/k8s-specifications/
+kubectl apply -f "${SCRIPT_DIR}/voting-app/k8s-specifications/"
 
 echo ""
 echo "Waiting for pods to start..."
