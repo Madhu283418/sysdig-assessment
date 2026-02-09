@@ -19,7 +19,7 @@ helm install sysdig-agent --namespace sysdig-agent --create-namespace \
     --set global.clusterConfig.name=sysdig-cluster \
     --set nodeAnalyzer.secure.vulnerabilityManagement.newEngineOnly=true \
     --set global.kspm.deploy=true \
-    --set nodeAnalyzer.nodeAnalyzer.benchmarkRunner.deploy=true \
+    --set nodeAnalyzer.nodeAnalyzer.benchmarkRunner.deploy=false \
     --set agent.sysdig.settings.feature.mode=secure \
     --set agent.sysdig.settings.feature.monitoring=false \
     sysdig/sysdig-deploy
@@ -34,5 +34,4 @@ echo "This installs:"
 echo "- Runtime threat detection"
 echo "- Vulnerability scanning"
 echo "- KSPM (compliance scanning)"
-echo "- Benchmark runner (CIS benchmarks)"
-echo "- Node analyzer"
+echo "- Node analyzer (host scanner, runtime scanner, KSPM analyzer)"
